@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 
 import models
 import schemas
+import security
 from database import get_db
 
 app = FastAPI(title="CampusCare")
@@ -64,12 +65,23 @@ def update_status(complaint_id: int, data: schemas.StatusUpdate, db: Session = D
     db.refresh(complaint)
     return complaint
 
-class User(Base):
-    __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(100), nullable=False)
-    email = Column(String(150), unique=True, nullable=False)
-    hashed_password = Column(String(255), nullable=False)
-    role = Column(String(20), default="student")
-    created_at = Column(DateTime, server_default=func.now())
+
+@app.post("/auth/register", response_model=schemas.UserOut, status_code=201)
+def register(data: schemas.UserCreate, db: Session = Depends(get_db)):
+    email = data.email.lower()
+
+    existing = db.query(models.User).filter(models.User.email == email).first()
+    if existing:
+        raise HTTPException(status_code=409, detail="Email already registered")
+
+    user = models.User(
+        name=data.name,
+        email=email,
+        hashed_password=security.hash_password(data.password),
+        role="student",
+    )
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user

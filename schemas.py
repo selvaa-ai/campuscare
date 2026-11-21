@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr, Field
 
 
 class DepartmentOut(BaseModel):
@@ -29,3 +29,18 @@ class ComplaintCreate(BaseModel):
 
 class StatusUpdate(BaseModel):
     status: str
+
+class UserCreate(BaseModel):
+    name: str
+    email: EmailStr
+    password: str = Field(min_length=6)
+
+
+class UserOut(BaseModel):
+    id: int
+    name: str
+    email: EmailStr
+    role: str
+    created_at: datetime | None = None
+
+    model_config = {"from_attributes": True}
