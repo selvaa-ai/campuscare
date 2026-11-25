@@ -1,5 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel, EmailStr, Field
+from typing import Literal
 
 
 class DepartmentOut(BaseModel):
@@ -17,6 +18,7 @@ class ComplaintOut(BaseModel):
     status: str
     created_at: datetime | None = None
     department_id: int | None = None
+    user_id: int | None = None
 
     model_config = {"from_attributes": True}
 
@@ -28,7 +30,7 @@ class ComplaintCreate(BaseModel):
 
 
 class StatusUpdate(BaseModel):
-    status: str
+    status: Literal["Open", "In Progress", "Resolved"]
 
 class UserCreate(BaseModel):
     name: str
@@ -48,3 +50,6 @@ class UserOut(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str    
+
+class RoleUpdate(BaseModel):
+    role: Literal["student", "team", "admin"]    

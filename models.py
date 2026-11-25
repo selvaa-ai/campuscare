@@ -19,7 +19,7 @@ class Complaint(Base):
     status = Column(String(30), default="Open")
     created_at = Column(DateTime, server_default=func.now())
     department_id = Column(Integer, ForeignKey("departments.id"))
-
+    user_id = Column(Integer, ForeignKey("users.id"))
 class User(Base):
     __tablename__ = "users"
 
