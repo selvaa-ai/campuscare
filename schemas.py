@@ -44,3 +44,7 @@ class UserOut(BaseModel):
     created_at: datetime | None = None
 
     model_config = {"from_attributes": True}
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str    
