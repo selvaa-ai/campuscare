@@ -7,6 +7,7 @@ class Department(Base):
 
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
+    email = Column(String(150))
 
 
 class Complaint(Base):
@@ -20,6 +21,7 @@ class Complaint(Base):
     created_at = Column(DateTime, server_default=func.now())
     department_id = Column(Integer, ForeignKey("departments.id"))
     user_id = Column(Integer, ForeignKey("users.id"))
+    category_id = Column(Integer, ForeignKey("categories.id"))
 class User(Base):
     __tablename__ = "users"
 
@@ -29,3 +31,10 @@ class User(Base):
     hashed_password = Column(String(255), nullable=False)
     role = Column(String(20), default="student")
     created_at = Column(DateTime, server_default=func.now())
+
+class Category(Base):
+    __tablename__ = "categories"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), unique=True, nullable=False)
+    department_id = Column(Integer, ForeignKey("departments.id"), nullable=False)    

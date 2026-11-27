@@ -18,6 +18,7 @@ class ComplaintOut(BaseModel):
     status: str
     created_at: datetime | None = None
     department_id: int | None = None
+    category_id: int | None = None
     user_id: int | None = None
 
     model_config = {"from_attributes": True}
@@ -27,10 +28,13 @@ class ComplaintCreate(BaseModel):
     description: str | None = None
     location: str | None = None
     department_id: int | None = None
+    category_id: int | None = None
 
 
 class StatusUpdate(BaseModel):
     status: Literal["Open", "In Progress", "Resolved"]
+    note: str | None = None
+    
 
 class UserCreate(BaseModel):
     name: str
@@ -52,4 +56,15 @@ class Token(BaseModel):
     token_type: str    
 
 class RoleUpdate(BaseModel):
-    role: Literal["student", "team", "admin"]    
+    role: Literal["student", "team", "admin"] 
+
+class NoteIn(BaseModel):
+    note: str | None = None         
+
+class CategoryOut(BaseModel):
+    id: int
+    name: str
+    department_id: int
+
+    model_config = {"from_attributes": True}      
+
